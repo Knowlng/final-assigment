@@ -1,6 +1,16 @@
 <?php 
-    $firmDatabase = new FirmDatabase();
-    $firmDatabase->deleteUsers();
+    if(isset($_SESSION['rights'])) {
+        $user = unserialize($_SESSION['rights']);
+    } else {
+        return;
+    }
+    if ($user->canInspectUserLess()){
+    } else {
+        return;
+    }
+    if ($user->canDeleteUser()){
+        $firmDatabase->deleteUsers();
+    } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,6 +23,14 @@
 <body>
     <div class="container">
         <div class="card-body"><h5 class="card-title">Vartotojai Main</h5>
+        <?php 
+            if ($user->canCreateUser()){
+                echo "<a class='btn btn-primary mt-3 mb-3' href='index.php?page=userCreate'>Create</a>";
+            } 
+            if ($user->canInspectUserRights()){
+                echo "<a class='btn btn-primary mt-3 mb-3 ml-3' href='index.php?page=userRights'>User Rights</a>";
+            } 
+        ?>
             <div class="table-responsive">
                 <table class="mb-0 table table-striped">
                     <thead>
@@ -29,7 +47,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php $firmDatabase->getUsers(); ?>
+                    <?php if ($user->canInspectUserFull()){
+                            $firmDatabase->getUsers("1");
+                        } else if($user->canInspectUserLess() && !($user->canDeleteUser())) {
+                            $firmDatabase->getUsers("3");
+                        } else if($user->canInspectUserLess() && $user->canDeleteUser()) {
+                            $firmDatabase->getUsers("2");
+                        } else {
+                            return;
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>

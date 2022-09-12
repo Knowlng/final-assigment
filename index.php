@@ -1,10 +1,16 @@
 <?php
     session_start();
-    // rasau cia nes kitaip header alredy sent
+    // rasau cia nes kitaip header already sent
     include("classes/firmDatabaseClass.php");
+    require_once("classes/userInterface.php");
     $firmDatabase = new FirmDatabase();
     $firmDatabase->logIntoSite();
-    $firmDatabase->editUsers();
+    $firmDatabase->editUsers(); 
+    $firmDatabase->editUsersRights(); 
+    $firmDatabase->createUserRights();
+    $firmDatabase->createClient();
+    $firmDatabase->editClient();
+    // $firmDatabase->saveSettings();
     if(isset($_POST["logout"])){
         session_destroy();
         header("location: index.php");
@@ -107,15 +113,13 @@
                                     Register
                                 </a>
                             </li>";
-                            } else {
+                            } else if($_SESSION["rankName"] == "administratorius") {
                                 echo "<li class='dropdown nav-item'>
                                 <a href='index.php?page=main' class='nav-link'>
                                     <i class='nav-link-icon fa fa-cog'></i>
                                     Main
                                 </a>
-                            </li>";
-                            }
-                            if(isset($_SESSION["rankName"]) == "administratorius") {
+                                </li>";
                                 echo "<li class='dropdown nav-item'>
                                 <a href='index.php?page=vartotojai' class='nav-link'>
                                     <i class='nav-link-icon fa fa-cog'></i>
@@ -140,6 +144,63 @@
                                     Admin Settings
                                 </a>
                                 </li>";
+                            } else if ($_SESSION["rankName"] == "sistemos administratorius" || $_SESSION["rankName"] == "vadybininkas") {
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=main' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Main
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=vartotojai' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Vartotojai
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=klientai' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Klientai
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=imones' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Imonės
+                                </a>
+                                </li>";
+                            } else if ($_SESSION["rankName"] == "inspektorius") {
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=main' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Main
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=vartotojai' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Vartotojai
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=klientai' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Klientai
+                                </a>
+                                </li>";
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=imones' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Imonės
+                                </a>
+                                </li>";
+                            } else {
+                                echo "<li class='dropdown nav-item'>
+                                <a href='index.php?page=main' class='nav-link'>
+                                    <i class='nav-link-icon fa fa-cog'></i>
+                                    Main
+                                </a>
+                            </li>";
                             }
                         ?>
                     </ul>        </div>
@@ -756,7 +817,27 @@
                                 include("vartotojai/index.php");
                             } else if(($_GET["page"]) == "userUpdate") {
                                 include("vartotojai/update.php");
-                            }
+                            } else if(($_GET["page"]) == "userCreate") {
+                                include("vartotojai/create.php");
+                            } else if(($_GET["page"]) == "adminsettings") {
+                                include("admin-settings/settings.php");
+                            } else if(($_GET["page"]) == "userRights") {
+                                include("vartotojai/vartotoju_teises/index.php");
+                            } else if(($_GET["page"]) == "userCreateRights") {
+                                include("vartotojai/vartotoju_teises/create.php");
+                            } else if(($_GET["page"]) == "userRightUpdate") {
+                                include("vartotojai/vartotoju_teises/update.php");
+                            } else if(($_GET["page"]) == "klientai") {
+                                include("klientai/index.php");
+                            } else if(($_GET["page"]) == "clientsCreate") {
+                                include("klientai/create.php");
+                            }  else if(($_GET["page"]) == "clientUpdate") {
+                                include("klientai/update.php");
+                            } else if(($_GET["page"]) == "clientRights") {
+                                include("klientai/klientai_teises/index.php");
+                            } else if(($_GET["page"]) == "clientCreateRights") {
+                                include("klientai/klientai_teises/create.php");
+                            } 
                         } 
                         else {
                             include("main.php");

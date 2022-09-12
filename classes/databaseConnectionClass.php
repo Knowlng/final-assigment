@@ -36,13 +36,35 @@ class DatabaseConnection {
 
     }
 
-    public function selectWithJoin($table1, $table2, $table1RelationCol, $table2RelationCol, $join, $cols) {
+    public function selectWithJoin($table1, $table2, $table1RelationCol, $table2RelationCol, $join, $cols, $sort) {
         $cols = implode(",", $cols);
         try {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $sql = "SELECT $cols FROM $table1 
             $join $table2
-            ON $table1.$table1RelationCol = $table2.$table2RelationCol";
+            ON $table1.$table1RelationCol = $table2.$table2RelationCol
+            $sort";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $result = $stmt->fetchAll();
+            return $result;
+        }
+        catch(PDOException $e) {
+            return "Nepavyko vykdyti uzklausos: " . $e->getMessage();
+        }
+    }
+
+    public function selectWithJoin3($table1, $table2, $table3, $table1RelationCol, $table2RelationCol, $table1RelationCol2, $table3RelationCol, $join, $join2, $cols, $sort) {
+        $cols = implode(",", $cols);
+        try {
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $sql = "SELECT $cols FROM $table1 
+            $join $table2
+            ON $table1.$table1RelationCol = $table2.$table2RelationCol
+            $join2 $table3
+            ON $table1.$table1RelationCol2 = $table3.$table3RelationCol
+            $sort";
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -97,7 +119,6 @@ class DatabaseConnection {
             $stmt->execute();
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
-
             return $result;
 
         } catch(PDOException $e) {
@@ -123,7 +144,7 @@ class DatabaseConnection {
 
         try {
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql= "SELECT vartotojai.slapyvardis, vartotojai.slaptazodis, vartotojai_teises.aprasymas FROM vartotojai
+            $sql= "SELECT vartotojai.ID, vartotojai.slapyvardis, vartotojai.slaptazodis, vartotojai_teises.aprasymas FROM vartotojai
             LEFT JOIN vartotojai_teises
             ON vartotojai.teises_ID = vartotojai_teises.ID
             WHERE slapyvardis ='$username' OR slaptazodis = '$password'";
