@@ -1,3 +1,10 @@
+<?php 
+    $register=$firmDatabase->selectOneAction("settings", "1");
+    if($register[0]["TrueOrFalse"]==0){
+        return;
+    }
+?>
+
 <!doctype html>
 <html lang="en">
 <head>

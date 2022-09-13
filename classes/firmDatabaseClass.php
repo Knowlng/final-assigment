@@ -487,18 +487,21 @@ class FirmDatabase extends DatabaseConnection{
         if(isset($_POST["saveSettings"])){
             $this->settings = $this->selectAction("settings","id","ASC");
             foreach($this->settings as $setting) {
-                echo isset($_POST["registerCheckbox"]);
-                // if($_POST["registerCheckbox"]) {
-                //     $setting = 0;
-                // } else {
-                //     $setting = 1;
-                // }
-                // $settings = array(
-                //     "TrueOrFalse" => $setting
-                // );
+                $settingName = $setting["ID"];
+                if(isset($_POST[$settingName])){
+                    $value = 1;
+                }
+                else{
+                    $value= 0;
+                }
+
+                $settings = array(
+                    "TrueOrFalse" => $value
+                );
+
                 $this->updateAction("settings", $setting['ID'] , $settings);
             }
-            // header("location: index.php?page=adminsettings");
+            header("location: index.php?page=adminsettings");
         }
     }
 
@@ -507,7 +510,7 @@ class FirmDatabase extends DatabaseConnection{
         return $settings;
     }
 
-    // negalejau ant login rodyti erroru ir siusti zmogu i kita puslapi su ta pacia funkcija
+    // negalejau ant login rodyti erroru ir header(location"") su ta pacia funkcija
     public function displayLoginError(){
         if(isset($_POST["login"])) {
             $username = $_POST['username'];

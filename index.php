@@ -5,18 +5,20 @@
     require_once("classes/userInterface.php");
     $firmDatabase = new FirmDatabase();
     $firmDatabase->logIntoSite();
-    $firmDatabase->editUsers(); 
-    $firmDatabase->editUsersRights(); 
-    $firmDatabase->createUserRights();
-    $firmDatabase->createClient();
-    $firmDatabase->editClient();
-    $firmDatabase->createClientRight();
-    $firmDatabase->editClientRight();
-    $firmDatabase->createFirm();
-    $firmDatabase->editFirm();
-    $firmDatabase->createFirmType();
-    $firmDatabase->editFirmTypes();
-    // $firmDatabase->saveSettings();
+    if(isset($_SESSION["username"]) && isset($_SESSION["rankName"])) { 
+        $firmDatabase->editUsers(); 
+        $firmDatabase->editUsersRights(); 
+        $firmDatabase->createUserRights();
+        $firmDatabase->createClient();
+        $firmDatabase->editClient();
+        $firmDatabase->createClientRight();
+        $firmDatabase->editClientRight();
+        $firmDatabase->createFirm();
+        $firmDatabase->editFirm();
+        $firmDatabase->createFirmType();
+        $firmDatabase->editFirmTypes();
+        $firmDatabase->saveSettings();
+    }
     if(isset($_POST["logout"])){
         session_destroy();
         header("location: index.php");
@@ -584,31 +586,13 @@
                                     </a>
                                 </li>
                                 <li class="app-sidebar__heading">UI Components</li>
-                                <li
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                >
+                                <li>
                                     <a href="#">
                                         <i class="metismenu-icon pe-7s-diamond"></i>
                                         Elements
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                     </a>
-                                    <ul
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                    >
+                                    <ul>
                                         <li>
                                             <a href="elements-buttons-standard.html">
                                                 <i class="metismenu-icon"></i>
@@ -659,37 +643,13 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    
-                                >
+                                <li>
                                     <a href="#">
                                         <i class="metismenu-icon pe-7s-car"></i>
                                         Components
                                         <i class="metismenu-state-icon pe-7s-angle-down caret-left"></i>
                                     </a>
-                                    <ul
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                        
-                                    >
+                                    <ul>
                                         <li>
                                             <a href="components-tabs.html">
                                                 <i class="metismenu-icon">
