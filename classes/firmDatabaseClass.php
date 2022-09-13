@@ -9,6 +9,7 @@ class FirmDatabase extends DatabaseConnection{
   public $clients;
   public $cRights;
   public $firms;
+  public $fTypes;
 
     public function __construct() {
         parent::__construct();
@@ -126,6 +127,11 @@ class FirmDatabase extends DatabaseConnection{
         }
     }
 
+    public function getRights() {
+        $this->rights = $this->selectAction("vartotojai_teises","id","ASC");
+        return $this->rights;
+    }
+
     public function getUsersRights() {
         $this->rights = $this->getRights();
         foreach ($this->rights as $display) {
@@ -240,11 +246,6 @@ class FirmDatabase extends DatabaseConnection{
         return $client;
     }
 
-    public function getClientRights() {
-        $this->cRights = $this->selectAction("klientai_teises","id","ASC");
-        return $this->cRights;
-    }
-
     public function editClient() {
         if(isset($_POST["editClient"])) {
             $client = array(
@@ -259,9 +260,194 @@ class FirmDatabase extends DatabaseConnection{
         }
     }
 
+    public function displayClientRights($title) {
+        $this->cRights = $this->getClientRights();
+        foreach ($this->cRights as $display) {
+            echo "<tr>";
+            echo "<td>".$display["ID"]."</td>";
+            echo "<td>".$display["pavadinimas"]."</td>";
+            echo "<td>".$display["reiksme"]."</td>";
+            echo "<td>";
+            if($title == 1){
+                echo "<form method='POST'>";
+                echo "<input type='hidden' name='id' value='".$display["ID"]."'>";
+                echo "<button class='btn btn-danger' type='submit' name='deleteClientRight'>DELETE</button>";
+                echo "<a href='index.php?page=clientRightUpdate&id=".$display["ID"]."' class='btn btn-success'>EDIT</a>";
+                echo "</form>";
+            } else if ($title == 3){
+                
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+    }
+
+    public function getClientRights() {
+        $this->cRights = $this->selectAction("klientai_teises","id","ASC");
+        return $this->cRights;
+    }
+
+    public function selectOneClientRight() {
+        $cRights = $this->selectOneAction("klientai_teises", $_GET["id"]);
+        return $cRights;
+    }
+
+    public function deleteClientRight() {
+        if(isset($_POST["deleteClientRight"])) {
+            $this->deleteAction("klientai_teises", $_POST["id"]);
+        }
+    }
+
+    public function createClientRight(){
+        if(isset($_POST["createClientRight"])) {
+            $cRights = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "reiksme" => $_POST["reiksme"]
+            );
+            $cRights["pavadinimas"] = '"' . $cRights["pavadinimas"] . '"';
+            $cRights["reiksme"] = '"' . $cRights["reiksme"] . '"';     
+            $this->insertAction("klientai_teises", ["pavadinimas", "reiksme"],[$cRights["pavadinimas"], $cRights["reiksme"]]);
+            header("location: index.php?page=clientRights");
+        }
+    }
+
+    public function editClientRight() {
+        if(isset($_POST["editClientRight"])) {
+            $cRights = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "reiksme" => $_POST["reiksme"]
+            );
+            $this->updateAction("klientai_teises", $_POST["id"] , $cRights);
+            header("location: index.php?page=clientRights");
+        }
+    }
+
+    public function displayFirms($title) {
+        $this->firms= $this->selectWithJoin("imones", "imones_tipas","tipas_ID", "ID", "LEFT JOIN",["imones.id", "imones.pavadinimas", "imones_tipas.pavadinimas as tipas_ID", "imones.aprasymas"], "ORDER BY `imones`.`ID` ASC");
+        foreach ($this->firms as $display) {
+            echo "<tr>";
+            echo "<td>".$display["id"]."</td>";
+            echo "<td>".$display["pavadinimas"]."</td>";
+            echo "<td class='text-center'>".$display["tipas_ID"]."</td>";
+            echo "<td>".$display["aprasymas"]."</td>";
+            echo "<td>";
+            if($title == 1){
+                echo "<form method='POST'>";
+                echo "<input type='hidden' name='id' value='".$display["id"]."'>";
+                echo "<button class='btn btn-danger' type='submit' name='deleteFirm'>DELETE</button>";
+                echo "<a href='index.php?page=firmUpdate&id=".$display["id"]."' class='btn btn-success'>EDIT</a>";
+                echo "</form>";
+            } else if ($title == 3){
+                
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+    }
+
+    public function deleteFirm() {
+        if(isset($_POST["deleteFirm"])) {
+            $this->deleteAction("imones", $_POST["id"]);
+        }
+    }
+
     public function getFirms() {
         $this->firms = $this->selectAction("imones","id","ASC");
         return $this->firms;
+    }
+
+    public function createFirm(){
+        if(isset($_POST["createFirm"])) {
+            $firm = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "tipas_ID" => $_POST["tipas_ID"],
+                "aprasymas" => $_POST["aprasymas"]
+            );
+            $firm["pavadinimas"] = '"' . $firm["pavadinimas"] . '"';
+            $firm["tipas_ID"] = '"' . $firm["tipas_ID"] . '"';  
+            $firm["aprasymas"] = '"' . $firm["aprasymas"] . '"';     
+            $this->insertAction("imones", ["pavadinimas", "tipas_ID", "aprasymas"],[$firm["pavadinimas"], $firm["tipas_ID"], $firm["aprasymas"]]);
+            header("location: index.php?page=imones");
+        }
+    }
+
+    public function selectOneFirm() {
+        $firm = $this->selectOneAction("imones", $_GET["id"]);
+        return $firm;
+    }
+
+    public function editFirm() {
+        if(isset($_POST["editFirm"])) {
+            $firm = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "tipas_ID" => $_POST["tipas_ID"],
+                "aprasymas" => $_POST["aprasymas"]
+            );
+            $this->updateAction("imones", $_POST["id"] , $firm);
+            header("location: index.php?page=imones");
+        }
+    }
+
+    public function displayFirmTypes($title) {
+        $this->fTypes = $this->getFirmTypes();
+        foreach ($this->fTypes as $display) {
+            echo "<tr>";
+            echo "<td>".$display["ID"]."</td>";
+            echo "<td>".$display["pavadinimas"]."</td>";
+            echo "<td>".$display["aprasymas"]."</td>";
+            echo "<td>";
+            if($title == 1){
+                echo "<form method='POST'>";
+                echo "<input type='hidden' name='id' value='".$display["ID"]."'>";
+                echo "<button class='btn btn-danger' type='submit' name='deleteFirmType'>DELETE</button>";
+                echo "<a href='index.php?page=firmTypeUpdate&id=".$display["ID"]."' class='btn btn-success'>EDIT</a>";
+                echo "</form>";
+            } else if ($title == 3){
+                
+            }
+            echo "</td>";
+            echo "</tr>";
+        }
+    }
+
+    public function deleteFirmType() {
+        if(isset($_POST["deleteFirmType"])) {
+            $this->deleteAction("imones_tipas", $_POST["id"]);
+        }
+    }
+
+    public function createFirmType(){
+        if(isset($_POST["createFirmType"])) {
+            $fTypes = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "aprasymas" => $_POST["aprasymas"]
+            );
+            $fTypes["pavadinimas"] = '"' . $fTypes["pavadinimas"] . '"';
+            $fTypes["aprasymas"] = '"' . $fTypes["aprasymas"] . '"';     
+            $this->insertAction("imones_tipas", ["pavadinimas", "aprasymas"],[$fTypes["pavadinimas"], $fTypes["aprasymas"]]);
+            header("location: index.php?page=firmTypes");
+        }
+    }
+
+    public function editFirmTypes() {
+        if(isset($_POST["editFirmType"])) {
+            $fType = array(
+                "pavadinimas" => $_POST["pavadinimas"],
+                "aprasymas" => $_POST["aprasymas"]
+            );
+            $this->updateAction("imones_tipas", $_POST["id"] , $fType);
+            header("location: index.php?page=firmTypes");
+        }
+    }
+
+    public function selectOneFirmType() {
+        $fType = $this->selectOneAction("imones_tipas", $_GET["id"]);
+        return $fType;
+    }
+
+    public function getFirmTypes() {
+        $this->fTypes = $this->selectAction("imones_tipas","id","ASC");
+        return $this->fTypes;
     }
 
     public function logIntoSite() {
@@ -295,11 +481,6 @@ class FirmDatabase extends DatabaseConnection{
                 exit();
             }
         }
-    }
-
-    public function getRights() {
-        $this->rights = $this->selectAction("vartotojai_teises","id","ASC");
-        return $this->rights;
     }
 
     public function saveSettings(){

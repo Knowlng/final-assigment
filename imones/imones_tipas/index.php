@@ -4,13 +4,13 @@
     } else {
         return;
     }
-    if ($user->canInspectUserRights()){
+    if ($user->canInspectFirmTypes()){
         
     } else {
         return;
     }
-    if ($user->canDeleteUserRights()){
-        $firmDatabase->deleteRight();
+    if ($user->canDeleteFirmTypes()){
+        $firmDatabase->deleteFirmType();
     } 
 ?>
 <!DOCTYPE html>
@@ -19,15 +19,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vartotojų teisės</title>
+    <title>Imoniu Tipai</title>
 </head>
 <body>
     <div class="container">
         <div class="main-card card">
-            <div class="card-body"><h5 class="card-title">Vartotojų Teisės Main</h5>
-                <?php 
-                    if ($user->canCreateUserRights()){
-                        echo "<a class='btn btn-primary mt-3 mb-3' href='index.php?page=userCreateRights'>Create</a>";
+            <div class="card-body"><h5 class="card-title">Imonių Tipai Main</h5>
+                <?php
+                    if ($user->canCreateFirmTypes()){
+                        echo "<a class='btn btn-primary mt-3 mb-3' href='index.php?page=createFirmTypes'>Create</a>";
                     }
                 ?>
                 <div class="table-responsive">
@@ -41,14 +41,19 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <?php $firmDatabase->getUsersRights(); ?>
+                            <?php if ($user->canInspectFirmTypes() && !($user->canDeleteFirmTypes()) && !($user->canEditFirmTypes())){
+                                $firmDatabase->displayFirmTypes("3");
+                                } else if($user->canInspectFirmTypes()) {
+                                    $firmDatabase->displayFirmTypes("1");
+                                } else {
+                                    return;
+                                }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
-         </div>
-    </div> 
-    
+       </div>
+    </div>
 </body>
 </html>
-

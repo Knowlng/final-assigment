@@ -10,6 +10,12 @@
     $firmDatabase->createUserRights();
     $firmDatabase->createClient();
     $firmDatabase->editClient();
+    $firmDatabase->createClientRight();
+    $firmDatabase->editClientRight();
+    $firmDatabase->createFirm();
+    $firmDatabase->editFirm();
+    $firmDatabase->createFirmType();
+    $firmDatabase->editFirmTypes();
     // $firmDatabase->saveSettings();
     if(isset($_POST["logout"])){
         session_destroy();
@@ -837,6 +843,20 @@
                                 include("klientai/klientai_teises/index.php");
                             } else if(($_GET["page"]) == "clientCreateRights") {
                                 include("klientai/klientai_teises/create.php");
+                            } else if(($_GET["page"]) == "clientRightUpdate") {
+                                include("klientai/klientai_teises/update.php");
+                            } else if(($_GET["page"]) == "imones") {
+                                include("imones/index.php");
+                            } else if(($_GET["page"]) == "firmCreate") {
+                                include("imones/create.php");
+                            } else if(($_GET["page"]) == "firmUpdate") {
+                                include("imones/update.php");
+                            } else if(($_GET["page"]) == "firmTypes") {
+                                include("imones/imones_tipas/index.php");
+                            } else if(($_GET["page"]) == "createFirmTypes") {
+                                include("imones/imones_tipas/create.php");
+                            }  else if(($_GET["page"]) == "firmTypeUpdate") {
+                                include("imones/imones_tipas/update.php");
                             } 
                         } 
                         else {

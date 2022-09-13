@@ -35,6 +35,19 @@ interface User {
     public function canEditClientsRights();
     public function canInspectClientsRights();
 
+    // firm rights
+
+    public function canCreateFirms();
+    public function canDeleteFirms();
+    public function canEditFirms();
+    public function canInspectFirms();
+    
+    // firm_types rights
+
+    public function canCreateFirmTypes();
+    public function canDeleteFirmTypes();
+    public function canEditFirmTypes();
+    public function canInspectFirmTypes();
 
 }
 
@@ -123,7 +136,41 @@ class Admin implements User {
         return true;
     }
 
+    // firm rights
 
+    public function canCreateFirms(){
+        return true;
+    }
+
+    public function canDeleteFirms(){
+        return true;
+    }
+
+    public function canEditFirms(){
+        return true;
+    }
+
+    public function canInspectFirms(){
+        return true;
+    }
+
+    // firm_types rights
+
+    public function canCreateFirmTypes(){
+        return true;
+    }
+
+    public function canDeleteFirmTypes(){
+        return true;
+    }
+
+    public function canEditFirmTypes(){
+        return true;
+    }
+
+    public function canInspectFirmTypes(){
+        return true;
+    }
 }
 
 class S_Admin implements User {
@@ -211,9 +258,41 @@ class S_Admin implements User {
         return true;
     }
 
+    // firm rights
 
+    public function canCreateFirms(){
+        return true;
+    }
 
+    public function canDeleteFirms(){
+        return true;
+    }
 
+    public function canEditFirms(){
+        return true;
+    }
+
+    public function canInspectFirms(){
+        return true;
+    }
+
+    // firm_types rights
+
+    public function canCreateFirmTypes(){
+        return true;
+    }
+
+    public function canDeleteFirmTypes(){
+        return true;
+    }
+
+    public function canEditFirmTypes(){
+        return true;
+    }
+
+    public function canInspectFirmTypes(){
+        return true;
+    }
 }
 
 class Vadyb implements User {
@@ -301,8 +380,41 @@ class Vadyb implements User {
         return true;
     }
 
+    // firm rights
 
+    public function canCreateFirms(){
+        return true;
+    }
 
+    public function canDeleteFirms(){
+        return true;
+    }
+
+    public function canEditFirms(){
+        return true;
+    }
+
+    public function canInspectFirms(){
+        return true;
+    }
+
+    // firm_types rights
+
+    public function canCreateFirmTypes(){
+        return true;
+    }
+
+    public function canDeleteFirmTypes(){
+        return true;
+    }
+
+    public function canEditFirmTypes(){
+        return true;
+    }
+
+    public function canInspectFirmTypes(){
+        return true;
+    }
 }
 
 class Inspek implements User {
@@ -390,9 +502,41 @@ class Inspek implements User {
         return true;
     }
 
+    // firm rights
 
+    public function canCreateFirms(){
+        return false;
+    }
 
+    public function canDeleteFirms(){
+        return false;
+    }
 
+    public function canEditFirms(){
+        return false;
+    }
+
+    public function canInspectFirms(){
+        return true;
+    }
+
+    // firm_types rights
+
+    public function canCreateFirmTypes(){
+        return false;
+    }
+
+    public function canDeleteFirmTypes(){
+        return false;
+    }
+
+    public function canEditFirmTypes(){
+        return false;
+    }
+
+    public function canInspectFirmTypes(){
+        return true;
+    }
 }
 
 class Vart implements User {
@@ -479,8 +623,40 @@ class Vart implements User {
         return false;
     }
 
+    // firm rights
 
+    public function canCreateFirms(){
+        return false;
+    }
 
+    public function canDeleteFirms(){
+        return false;
+    }
 
+    public function canEditFirms(){
+        return false;
+    }
+
+    public function canInspectFirms(){
+        return false;
+    }
+
+    // firm_types rights
+
+    public function canCreateFirmTypes(){
+        return false;
+    }
+
+    public function canDeleteFirmTypes(){
+        return false;
+    }
+
+    public function canEditFirmTypes(){
+        return false;
+    }
+
+    public function canInspectFirmTypes(){
+        return false;
+    }
 }
 ?>
