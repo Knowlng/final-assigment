@@ -13,7 +13,7 @@
 </head>
 <body>  
     <div class="container">
-        <?php $firmDatabase->displayLoginError();?>
+        <?php $firmDatabase->logIntoSite();?>
         <div class="main-card card">
             <div class="card-body"><h5 class="card-title">Login</h5>
                 <form method="POST" class="">

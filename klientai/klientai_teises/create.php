@@ -5,6 +5,7 @@
         return;
     }
     if ($user->canCreateClientsRights()){
+        $firmDatabase->createClientRight();
     } else {
         return;
     }

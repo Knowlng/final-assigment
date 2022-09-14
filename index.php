@@ -1,24 +1,9 @@
 <?php
+    ob_start();
     session_start();
-    // rasau cia nes kitaip header already sent
     include("classes/firmDatabaseClass.php");
     require_once("classes/userInterface.php");
     $firmDatabase = new FirmDatabase();
-    $firmDatabase->logIntoSite();
-    if(isset($_SESSION["username"]) && isset($_SESSION["rankName"])) { 
-        $firmDatabase->editUsers(); 
-        $firmDatabase->editUsersRights(); 
-        $firmDatabase->createUserRights();
-        $firmDatabase->createClient();
-        $firmDatabase->editClient();
-        $firmDatabase->createClientRight();
-        $firmDatabase->editClientRight();
-        $firmDatabase->createFirm();
-        $firmDatabase->editFirm();
-        $firmDatabase->createFirmType();
-        $firmDatabase->editFirmTypes();
-        $firmDatabase->saveSettings();
-    }
     if(isset($_POST["logout"])){
         session_destroy();
         header("location: index.php");
@@ -107,110 +92,7 @@
                                 Settings
                             </a>
                         </li>
-                        <?php 
-                            if(!isset($_SESSION["username"]) && !isset($_SESSION["rankName"])) { 
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=login' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Login
-                                </a>
-                            </li>
-                            <li class='dropdown nav-item'>
-                                <a href='index.php?page=register' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Register
-                                </a>
-                            </li>";
-                            } else if($_SESSION["rankName"] == "administratorius") {
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=main' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Main
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=vartotojai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Vartotojai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=klientai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Klientai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=imones' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Imonės
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=adminsettings' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Admin Settings
-                                </a>
-                                </li>";
-                            } else if ($_SESSION["rankName"] == "sistemos administratorius" || $_SESSION["rankName"] == "vadybininkas") {
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=main' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Main
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=vartotojai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Vartotojai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=klientai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Klientai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=imones' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Imonės
-                                </a>
-                                </li>";
-                            } else if ($_SESSION["rankName"] == "inspektorius") {
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=main' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Main
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=vartotojai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Vartotojai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=klientai' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Klientai
-                                </a>
-                                </li>";
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=imones' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Imonės
-                                </a>
-                                </li>";
-                            } else {
-                                echo "<li class='dropdown nav-item'>
-                                <a href='index.php?page=main' class='nav-link'>
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Main
-                                </a>
-                            </li>";
-                            }
-                        ?>
+                        <?php $firmDatabase->showNavHorizontal(); ?>
                     </ul>        </div>
                 <div class="app-header-right">
                     <div class="header-btn-lg pr-0">
@@ -233,30 +115,13 @@
                                 </div>
                                 <div class="widget-content-left  ml-3 header-user-info">
                                 <div class="widget-heading">
-                                        <?php 
-                                            if(isset($_SESSION["username"])) { 
-                                                echo $_SESSION["username"];
-                                            }
-                                        ?>
+                                        <?php $firmDatabase->showUsername(); ?>
                                     </div>
                                     <div class="widget-subheading">
-                                        <?php 
-                                            if(isset($_SESSION["rankName"])) { 
-                                                echo $_SESSION["rankName"];
-                                            }
-                                        ?>
+                                        <?php $firmDatabase->showUserRank(); ?>
                                     </div>
                                 </div>
-                                <?php
-                                if(isset($_SESSION["username"]) && isset($_SESSION["rankName"])) { 
-                                    echo "<form method='POST'>
-                                    <button class='btn btn-link text-decoration-none nav-link' name='logout'> 
-                                    <i class='nav-link-icon fa fa-cog'></i>
-                                    Logout
-                                    </button>
-                                    </form>";
-                                }
-                                ?>
+                                <?php $firmDatabase->showLogoutHorizontal(); ?>
                                 <div class="widget-content-right header-user-info ml-3">
                                     <button type="button" class="btn-shadow p-1 btn btn-primary btn-sm show-toastr-example">
                                         <i class="fa text-white fa-calendar pr-1 pl-1"></i>
@@ -578,9 +443,10 @@
                     </div>    <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
+                                <?php $firmDatabase->showNavVertical();?>
                                 <li class="app-sidebar__heading">Dashboards</li>
                                 <li>
-                                    <a href="index.php" class="mm-active">
+                                    <a href="index.php">
                                         <i class="metismenu-icon pe-7s-rocket"></i>
                                         Dashboard Example 1
                                     </a>

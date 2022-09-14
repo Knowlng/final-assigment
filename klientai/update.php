@@ -6,6 +6,7 @@ if(isset($_SESSION['rights'])) {
 }
 if ($user->canEditClients()){
     $client=$firmDatabase->selectOneClient();
+    $firmDatabase->editClient();
 } else {
     return;
 }

@@ -6,6 +6,7 @@ if(isset($_SESSION['rights'])) {
 }
 if ($user->canToggleRegister()){
     $settings=$firmDatabase->getSettings();
+    $firmDatabase->saveSettings();
 } else {
     return;
 }

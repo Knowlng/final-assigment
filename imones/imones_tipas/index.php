@@ -5,7 +5,6 @@
         return;
     }
     if ($user->canInspectFirmTypes()){
-        
     } else {
         return;
     }

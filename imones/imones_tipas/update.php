@@ -6,6 +6,7 @@
     }
     if ($user->canEditFirmTypes()){
         $fType=$firmDatabase->selectOneFirmType();
+        $firmDatabase->editFirmTypes();
     } else {
         return;
     }

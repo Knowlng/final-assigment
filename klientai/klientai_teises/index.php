@@ -5,7 +5,6 @@
         return;
     }
     if ($user->canInspectClientsRights()){
-        
     } else {
         return;
     }

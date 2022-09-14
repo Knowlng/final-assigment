@@ -6,6 +6,7 @@ if(isset($_SESSION['rights'])) {
 }
 if ($user->canEditUser()){
     $users=$firmDatabase->selectOneUser();
+    $firmDatabase->editUsers(); 
 } else {
     return;
 }

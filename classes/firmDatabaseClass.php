@@ -15,6 +15,209 @@ class FirmDatabase extends DatabaseConnection{
         parent::__construct();
     }
 
+    public function showUsername(){
+        if(isset($_SESSION["username"])) { 
+            echo $_SESSION["username"];
+        }
+    }
+
+    public function showUserRank(){
+        if(isset($_SESSION["rankName"])) { 
+            echo $_SESSION["rankName"];
+        }
+    }
+
+    public function showLogoutHorizontal() {
+        if(isset($_SESSION["username"]) && isset($_SESSION["rankName"])) { 
+            echo "<form method='POST'>
+            <button class='btn btn-link text-decoration-none nav-link text-danger' name='logout'> 
+            <i class='nav-link-icon fa fa-outdent'></i>
+            Sign out
+            </button>
+            </form>";
+        }
+    }
+
+    public function showNavHorizontal(){
+        if(isset($_SESSION['rights'])) {
+            $user = unserialize($_SESSION['rights']);
+            if($user->canInspectUserLess() || $user->canInspectUserFull()){
+                echo "<li class='dropdown nav-item'>
+                <a href='index.php?page=vartotojai' class='nav-link'>
+                    <i class='nav-link-icon fa fa-user'></i>
+                    Vartotojai
+                </a>
+                </li>";
+            }
+            if($user->canInspectClients()){
+                echo "<li class='dropdown nav-item'>
+                <a href='index.php?page=klientai' class='nav-link'>
+                    <i class='nav-link-icon fa fa-male'></i>
+                    Klientai
+                </a>
+                </li>";
+            }
+            if($user->canInspectFirms()){
+                echo "<li class='dropdown nav-item'>
+                <a href='index.php?page=imones' class='nav-link'>
+                    <i class='nav-link-icon fa fa-university'></i>
+                    Imonės
+                </a>
+                </li>";
+            }
+        } else {
+            $register=$this->selectOneAction("settings", "1");
+            echo "<li class='dropdown nav-item'>
+            <a href='index.php?page=login' class='nav-link'>
+                <i class='nav-link-icon fa fa-lock'></i>
+                Login
+            </a>
+            </li>";
+        
+            if($register[0]["TrueOrFalse"]==1){
+                echo "<li class='dropdown nav-item'>
+                        <a href='index.php?page=register' class='nav-link'>
+                            <i class='nav-link-icon fa fa-registered'></i>
+                            Register
+                        </a>
+                    </li>";
+            }
+        }
+    }
+
+    public function showNavVertical(){
+        if(isset($_SESSION['rights'])) {
+            $user = unserialize($_SESSION['rights']);
+            echo " <li class='app-sidebar__heading'>Account</li>
+            <li>
+                <a>
+                    <i class='metismenu-icon pe-7s-user'></i>";
+                    $this->showUsername();
+            echo "</a></li>";
+            echo "<li>
+            <a>
+                <i class='metismenu-icon pe-7s-key'></i>";
+                $this->showUserRank();
+            echo "</a></li>";
+            echo "<a>
+                <form method='POST'>
+                <button class='btn btn-link nav-link text-danger text-decoration-none' name='logout'> 
+                Sign out
+                </button>
+                </form>";
+            echo "</a>";
+            echo " <li class='app-sidebar__heading'>Menu</li>
+            <li>
+                <a href='index.php?page=main'>
+                    <i class='metismenu-icon pe-7s-home'></i>
+                    Main
+                </a>
+            </li>";
+            if($user->canInspectUserRights() && $user->canInspectUserLess()){
+                echo "<li>
+                <a href='#'>
+                    <i class='metismenu-icon pe-7s-users'></i>
+                    Vartotojai
+                    <i class='metismenu-state-icon pe-7s-angle-down caret-left'></i>
+                </a>
+                <ul>
+                    <li>
+                        <a href='index.php?page=vartotojai'>
+                            <i class='metismenu-icon'></i>
+                            Vartotojų Sąrašas
+                        </a>
+                    </li>
+                    <li>
+                    <a href='index.php?page=userRights'>
+                        <i class='metismenu-icon'></i>
+                        Vartotojų Teisių Sąrašas
+                    </a>
+                </li>
+                </ul>
+                </li>";
+            } else if($user->canInspectUserFull() || $user->canInspectUserLess()) {
+                echo"<li>
+                <a href='index.php?page=vartotojai'>
+                    <i class='metismenu-icon pe-7s-users'></i>
+                    Vartotojų Sąrašas
+                </a>
+                </li>";
+            }
+            if($user->canInspectClients() && $user->canInspectClientsRights()){
+                echo "<li>
+                <a href='#'>
+                    <i class='metismenu-icon pe-7s-wristwatch'></i>
+                    Klientai
+                    <i class='metismenu-state-icon pe-7s-angle-down caret-left'></i>
+                </a>
+                <ul>
+                    <li>
+                        <a href='index.php?page=klientai'>
+                            <i class='metismenu-icon'></i>
+                            Klientų Sąrašas
+                        </a>
+                    </li>
+                    <li>
+                    <a href='index.php?page=clientRights'>
+                        <i class='metismenu-icon'></i>
+                        Klientų Teisių Sąrašas
+                    </a>
+                </li>
+                </ul>
+                </li>";
+            }
+            if($user->canInspectFirms() && $user->canInspectFirmTypes()){
+                echo "<li>
+                <a href='#'>
+                    <i class='metismenu-icon pe-7s-culture'></i>
+                    Įmonės
+                    <i class='metismenu-state-icon pe-7s-angle-down caret-left'></i>
+                </a>
+                <ul>
+                    <li>
+                        <a href='index.php?page=imones'>
+                            <i class='metismenu-icon'></i>
+                            Įmonių Sąrašas
+                        </a>
+                    </li>
+                    <li>
+                    <a href='index.php?page=firmTypes'>
+                        <i class='metismenu-icon'></i>
+                        Įmonių Tipų Sąrašas
+                    </a>
+                </li>
+                </ul>
+                </li>";
+            }
+            if($user->canToggleRegister()){
+                echo " <li class='app-sidebar__heading'>Settings</li>
+                <li>
+                    <a href='index.php?page=adminsettings'>
+                        <i class='metismenu-icon pe-7s-door-lock'></i>
+                        Administratoriaus Nustatymai
+                    </a>
+                </li>";
+            }
+        } else {
+            $register=$this->selectOneAction("settings", "1");
+            echo "<li class='app-sidebar__heading'>Menu</li>
+            <li>
+                <a href='index.php?page=login'>
+                    <i class='metismenu-icon pe-7s-unlock'></i>
+                    Login
+                </a>
+            </li>";
+            if($register[0]["TrueOrFalse"]==1){
+                echo "<li>
+                <a href='index.php?page=register'>
+                    <i class='metismenu-icon pe-7s-note'></i>
+                    Register
+                </a>
+                </li>";
+            }
+        }
+    }
+
     public function createUser($reg0Crt1){
         if(isset($_POST["register"])) {
             $currentTimeStamp = strtotime("now");
@@ -456,29 +659,37 @@ class FirmDatabase extends DatabaseConnection{
             $password = $_POST['password'];
 
             $login = $this->login($username, $password);
-            if(!empty($login) && $login[0]['slapyvardis']== $username && $login[0]['slaptazodis']==$password){
-                if($login[0]['aprasymas'] == "administratorius"){
-                    $user = new Admin();
-                } else if($login[0]['aprasymas'] == "sistemos administratorius"){
-                    $user = new S_Admin();
-                } else if($login[0]['aprasymas'] == "vadybininkas"){
-                    $user = new Vadyb();
-                } else if($login[0]['aprasymas'] == "inspektorius"){
-                    $user = new Inspek();
-                } else if($login[0]['aprasymas'] == "vartotojas"){
-                    $user = new Vart();
+            if(!empty($login)){
+                if($login[0]['slapyvardis']== $username && $login[0]['slaptazodis']!=$password){
+                    echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>Your password is incorrect</p></div></div></div>";
+                } else if($login[0]['slapyvardis']== $username && $login[0]['slaptazodis']==$password) {
+                    if($login[0]['aprasymas'] == "administratorius"){
+                        $user = new Admin();
+                    } else if($login[0]['aprasymas'] == "sistemos administratorius"){
+                        $user = new S_Admin();
+                    } else if($login[0]['aprasymas'] == "vadybininkas"){
+                        $user = new Vadyb();
+                    } else if($login[0]['aprasymas'] == "inspektorius"){
+                        $user = new Inspek();
+                    } else if($login[0]['aprasymas'] == "vartotojas"){
+                        $user = new Vart();
+                    }
+                    $_SESSION["rights"] = serialize($user);
+                    $_SESSION["rankName"] = $login[0]['aprasymas'];
+                    $_SESSION["username"] = $login[0]['slapyvardis'];
+                    $currentTimeStamp = strtotime("now");
+                    $date = date("Y-m-d", $currentTimeStamp);
+                    $user = array(
+                        "paskutinis_prisijungimas" => $date
+                    );
+                    $this->updateAction("vartotojai",$login[0]['ID'], $user);
+                    header("Location: index.php");
+                    exit();
+                } else {
+                    echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>This user doesn't exist!</p></div></div></div>";
                 }
-                $_SESSION["rights"] = serialize($user);
-                $_SESSION["rankName"] = $login[0]['aprasymas'];
-                $_SESSION["username"] = $login[0]['slapyvardis'];
-                $currentTimeStamp = strtotime("now");
-                $date = date("Y-m-d", $currentTimeStamp);
-                $user = array(
-                    "paskutinis_prisijungimas" => $date
-                );
-                $this->updateAction("vartotojai",$login[0]['ID'], $user);
-                header("Location: index.php");
-                exit();
+            } else {
+                echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>This user doesn't exist!</p></div></div></div>";
             }
         }
     }
@@ -508,25 +719,6 @@ class FirmDatabase extends DatabaseConnection{
     public function getSettings() {
         $settings= $this->selectAction("settings","id", "ASC");   
         return $settings;
-    }
-
-    // negalejau ant login rodyti erroru ir header(location"") su ta pacia funkcija
-    public function displayLoginError(){
-        if(isset($_POST["login"])) {
-            $username = $_POST['username'];
-            $password = $_POST['password'];
-
-            $login = $this->login($username, $password);
-            if(!empty($login)){
-                if($login[0]['slapyvardis']== $username && $login[0]['slaptazodis']!=$password){
-                    echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>Your password is incorrect</p></div></div></div>";
-                } else {
-                    echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>This user doesn't exist!</p></div></div></div>";
-                }
-            } else {
-                echo "<div class='container mt-4'><div class='m-auto main-card mb-3 card w-25 text-center'><div class='card-body bg-danger text-white'><h5 class='card-title text-white'>Ooops!</h5><p>This user doesn't exist!</p></div></div></div>";
-            }
-        }
     }
 }
 ?>

@@ -6,6 +6,7 @@
     }
     if ($user->canEditFirms()){
         $firm=$firmDatabase->selectOneFirm();
+        $firmDatabase->editFirm();
     } else {
         return;
     }

@@ -323,7 +323,7 @@ class Vadyb implements User {
     }
 
     public function canInspectUserLess(){
-        return true;
+        return false;
     }
 
     ///user_rights rights

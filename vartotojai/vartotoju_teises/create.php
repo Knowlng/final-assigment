@@ -5,6 +5,7 @@
         return;
     }
     if ($user->canCreateUserRights()){
+        $firmDatabase->createUserRights();
     } else {
         return;
     }

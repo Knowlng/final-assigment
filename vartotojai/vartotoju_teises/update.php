@@ -6,6 +6,7 @@
     }
     if ($user->canEditUserRights()){
         $rights=$firmDatabase->selectOneRight();
+        $firmDatabase->editUsersRights(); 
     } else {
         return;
     }

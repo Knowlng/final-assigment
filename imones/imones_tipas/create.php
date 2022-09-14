@@ -5,6 +5,7 @@
         return;
     }
     if ($user->canCreateFirmTypes()){
+        $firmDatabase->createFirmType();
     } else {
         return;
     }

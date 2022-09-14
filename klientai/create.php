@@ -5,6 +5,7 @@ if(isset($_SESSION['rights'])) {
     return;
 }
 if ($user->canCreateClients()){
+    $firmDatabase->createClient();
 } else {
     return;
 }

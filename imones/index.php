@@ -5,7 +5,6 @@
         return;
     }
     if ($user->canInspectFirms()){
-        
     } else {
         return;
     }

@@ -5,6 +5,7 @@
         return;
     }
     if ($user->canCreateFirms()){
+        $firmDatabase->createFirm();
     } else {
         return;
     }
