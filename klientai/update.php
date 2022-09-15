@@ -33,7 +33,7 @@ if ($user->canEditClients()){
                         <label>Teisės</label>
                         <select class="form-control" name="teises_ID">
                             <?php foreach($firmDatabase->getClientRights() as $right) { ?>
-                                <?php if($client[0]["teises_ID"] == $right["ID"]) { ?>
+                                <?php if($client[0]["teises_id"] == $right["ID"]) { ?>
                                     <option value="<?php echo $right['ID']; ?>" selected><?php echo $right['pavadinimas']; ?></option>
                                 <?php }  else {?>
                                     <option value="<?php echo $right['ID']; ?>"><?php echo $right['pavadinimas']; ?></option>
@@ -45,7 +45,7 @@ if ($user->canEditClients()){
                         <label>Imones</label>
                         <select class="form-control" name="imones_id">
                             <?php foreach($firmDatabase->getFirms() as $firm) { ?>
-                                <?php if($client[0]["teises_ID"] == $firm["ID"]) { ?>
+                                <?php if($client[0]["imones_id"] == $firm["ID"]) { ?>
                                     <option value="<?php echo $firm['ID']; ?>" selected><?php echo $firm['pavadinimas']; ?></option>
                                 <?php }  else {?>
                                     <option value="<?php echo $firm['ID']; ?>"><?php echo $firm['pavadinimas']; ?></option>
